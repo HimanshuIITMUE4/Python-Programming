@@ -1,0 +1,60 @@
+import copy
+
+s = [[4,8,2], [4,5,7], [6,1,6]]
+
+def column(mSquare, i):
+    return [row[i] for row in mSquare]
+
+def interchangeFirstLastRow(mat, n, m): 
+    rows = n 
+    for i in range(n): 
+        t = mat[0][i] 
+        mat[0][i] = mat[rows-1][i] 
+        mat[rows-1][i] = t
+    return mat
+
+def interchangeFirstLastColumn(mat, n, m):  
+    rows = n  
+    for i in range(n):  
+        t = mat[i][0]; 
+        mat[i][0] = mat[i][n-1]; 
+        mat[i][n-1] = t; 
+    return mat
+
+def transposeOfAListArray(mat):
+    return [[mat[j][i] for j in range(len(mat))] for i in range(len(mat[0]))]
+
+ListmagicSqs = []
+k = [2,4,6,8]
+magicSqs = [[5 if i == 1 and j == 1 else 0 for i in range(3)] for j in range(3)]
+
+magicSqs[0][0], magicSqs[0][2], magicSqs[2][0], magicSqs[2][2] = k[0], k[1], k[2], k[3]
+
+magicSqs[0][1] = 15 - sum(magicSqs[0])
+magicSqs[2][1] = 15 - sum(magicSqs[2])
+magicSqs[1][0] = 15 - sum(column(magicSqs, 0))
+magicSqs[1][2] = 15 - sum(column(magicSqs, 2))
+
+m = copy.deepcopy(magicSqs)
+ListmagicSqs.append(magicSqs)
+m1 = interchangeFirstLastColumn(m, 3, 3)
+ListmagicSqs.append(m1)
+m = copy.deepcopy(magicSqs)
+m2 = interchangeFirstLastRow(m, 3, 3)
+ListmagicSqs.append(m2)
+m3 = interchangeFirstLastColumn(copy.deepcopy(m2), 3, 3)
+ListmagicSqs.append(m3)
+ListmagicSqs.append(transposeOfAListArray(copy.deepcopy(ListmagicSqs[0])))
+ListmagicSqs.append(transposeOfAListArray(copy.deepcopy(ListmagicSqs[1])))
+ListmagicSqs.append(transposeOfAListArray(copy.deepcopy(ListmagicSqs[2])))
+ListmagicSqs.append(transposeOfAListArray(copy.deepcopy(ListmagicSqs[3])))
+
+cost = 45
+for k in ListmagicSqs:
+    sumValue = 0
+    for pair in zip(k, s):
+        for vals in zip(pair[0], pair[1]):
+            sumValue += abs(vals[0] - vals[1])
+    if sumValue < cost:
+        cost = sumValue
+print(cost)
