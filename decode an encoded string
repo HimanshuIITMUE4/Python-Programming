@@ -1,0 +1,24 @@
+s = list("43Ah*ck0rr0nk")
+excludeIndex = []
+i = 0
+while i < len(s):
+    if i in excludeIndex:
+        i += 1
+        continue
+    if s[i].isdigit():
+        k = s.index("0")
+        s[k]  = s[i]
+        for x in range(len(excludeIndex)):
+            excludeIndex[x] = excludeIndex[x] - 1
+        excludeIndex.append(k - 1)
+        s.pop(i)
+        
+    elif str(s[i]).isupper() == True and str(s[i+1]).islower() == True:
+        s[i], s[i+1] = s[i+1], s[i]
+        s.pop(i+2)
+        for x in range(len(excludeIndex)):
+            excludeIndex[x] = excludeIndex[x] - 1
+        i += 3
+    else:
+        i += 1
+''.join(s)
