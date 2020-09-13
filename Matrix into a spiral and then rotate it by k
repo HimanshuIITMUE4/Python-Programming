@@ -1,0 +1,45 @@
+def calculateSpiralIndexes(m, n):
+    a= 0 
+    b=0
+    valRange = n // 2 if n % 2 == 0 else (n//2)+1
+    lstAddr = []
+    for i in range(valRange):
+        if a < m-i and b < n-i:
+            for x in range(i, n-i):
+                lstAddr.append([a, x])
+                b = x
+            a += 1
+        if a < m-i and b == n-1-i:
+            for y in range(i+1, m-i):
+                lstAddr.append([y, b])
+                a = y
+        if a == m-1-i and b== n-1-i:
+            for z in range(n-2-i, -1+i, -1):
+                lstAddr.append([a, z])
+                b = z
+        if a == m-1-i and b < n-i:
+            for t in range(m-2-i, i, -1):
+                lstAddr.append([t, b])
+                a = t
+    return lstAddr 
+
+m =len(matrix)
+n = len(matrix[0])
+r = 40
+spirledMatrix = []
+for i in range(n//2):
+    lstSipral = []
+    lstSipral += matrix[i][i:n-i]
+    lstSipral += [row[n-(i+1)] for row in matrix][i+1:m-i]
+    lstSipral += list(reversed(matrix[m-(i+1)][i:-1 - i]))
+    lstSipral += list(reversed([row[i] for row in matrix][i+1:m-(i+1)]))
+    q = r % len(lstSipral)
+    lstSipral = lstSipral[q:] + lstSipral[:q]
+    spirledMatrix += lstSipral
+
+resultMatrix = [[0 for i in range(n)] for j in range(m)]
+si = calculateSpiralIndexes(m, n)
+for i in range(m*n):
+    resultMatrix[si[i][0]][si[i][1]] = spirledMatrix[i]
+for lst in resultMatrix:
+    print(" ".join(str(x) for x in lst))
